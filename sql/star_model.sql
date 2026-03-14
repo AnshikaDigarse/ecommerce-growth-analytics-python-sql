@@ -1,1 +1,0 @@
--- Star schema model

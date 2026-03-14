@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from src.customer_engine import CustomerEngine
 
 
 class CartEngine:
@@ -8,12 +9,14 @@ class CartEngine:
     Calibrated for realistic industry-level conversion rates (~22–25%).
     """
 
-    def __init__(self, sessions_df, customers_df, latent_traits_df, products_df):
+    def __init__(self, sessions_df, products_df):
+
         self.sessions = sessions_df
-        self.customers = customers_df
-        self.latent = latent_traits_df
         self.products = products_df
         self.cart_events = None
+
+        self.customers = CustomerEngine().generate()
+        self.latent = CustomerEngine().generate_latent_traits()
 
         # Merge necessary behavioral data once (efficient)
         self.sessions = self.sessions.merge(
@@ -26,7 +29,7 @@ class CartEngine:
             how="left"
         )
 
-    def generate_cart_events(self):
+    def generate(self):
 
         cart_records = []
         cart_id = 1
@@ -87,18 +90,22 @@ class CartEngine:
 
                 selected_products = self.products.sample(
                     basket_size,
-                    replace=True
+                    replace=True,
+                    random_state=42
                 )
 
                 for _, product in selected_products.iterrows():
 
                     quantity = np.random.randint(1, 3)
 
+                    event_timestamp = pd.to_datetime(row["session_date"]) + pd.to_timedelta(np.random.randint(0, 1440), unit="m")
                     cart_records.append([
                         cart_id,
                         row["session_id"],
                         row["customer_id"],
                         product["product_id"],
+                        "add_to_cart",
+                        event_timestamp,
                         quantity
                     ])
 
@@ -111,8 +118,12 @@ class CartEngine:
                 "session_id",
                 "customer_id",
                 "product_id",
+                "event_type",
+                "event_timestamp",
                 "quantity"
             ]
         )
+
+        self.cart_events.to_csv("data/raw/cart_events.csv", index=False)
 
         return self.cart_events

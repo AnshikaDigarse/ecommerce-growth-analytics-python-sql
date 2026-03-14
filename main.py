@@ -1,63 +1,92 @@
-from pathlib import Path
+"""
+Main pipeline runner for the E-commerce Growth Analytics Platform.
+
+Pipeline steps
+--------------
+1. Generate simulated datasets
+2. Save raw CSV files
+3. Run ETL pipeline
+4. Build SQL warehouse (star schema)
+"""
+
+import os
 
 from src.customer_engine import CustomerEngine
 from src.product_engine import ProductEngine
 from src.session_engine import SessionEngine
 from src.cart_engine import CartEngine
+from src.order_engine import OrderEngine
+from src.etl_pipeline import ETLPipeline
+
+from sqlalchemy import create_engine, text
 
 
-# -------------------------------------------------
-# Resolve project root based on file location
-# -------------------------------------------------
-BASE_DIR = Path(__file__).resolve().parent
-DATA_RAW = BASE_DIR / "data" / "raw"
-DATA_PROCESSED = BASE_DIR / "data" / "processed"
+def build_star_schema():
 
+    print("Building warehouse star schema...")
 
-def ensure_directories():
-    DATA_RAW.mkdir(parents=True, exist_ok=True)
-    DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
+    engine = create_engine(
+        "mysql+pymysql://root:Anshika%401@localhost:3306/ecommerce_analytics"
+    )
+
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    sql_file = os.path.join(base_path, "sql", "star_schema.sql")
+
+    with open(sql_file, "r") as file:
+        sql_script = file.read()
+
+    with engine.connect() as conn:
+        for statement in sql_script.split(";"):
+            stmt = statement.strip()
+            if stmt:
+                conn.execute(text(stmt))
+
+    print("Star schema created successfully.")
 
 
 def main():
+    # Change to the script's directory to ensure relative paths work
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(script_dir)
 
-    print("Starting E-commerce Growth Platform Simulation...")
-    ensure_directories()
+    print("Starting E-commerce Growth Platform Simulation")
 
-    # Customers
-    customer_engine = CustomerEngine()
-    customers = customer_engine.generate_customers()
-    latent_traits = customer_engine.generate_latent_traits()
+    customers = CustomerEngine().generate()
+    print("Customers generated")
 
-    customers.to_csv(DATA_RAW / "customers.csv", index=False)
-    latent_traits.to_csv(DATA_PROCESSED / "customer_latent_traits.csv", index=False)
+    # Generate and save latent traits
+    latent_traits = CustomerEngine().generate_latent_traits()
+    latent_traits.to_csv("data/processed/customer_latent_traits.csv", index=False)
+    print("Latent traits generated")
 
-    print("Customers generated.")
+    products = ProductEngine().generate()
+    print("Products generated")
 
-    # Products
-    product_engine = ProductEngine()
-    products = product_engine.generate_products()
-    products.to_csv(DATA_RAW / "products.csv", index=False)
+    sessions = SessionEngine(customers).generate()
+    print("Sessions generated")
 
-    print("Products generated.")
+    cart_events = CartEngine(sessions, products).generate()
+    print("Cart events generated")
 
-    # Sessions
-    session_engine = SessionEngine(customers, latent_traits)
-    sessions = session_engine.generate_sessions()
-    sessions.to_csv(DATA_RAW / "sessions.csv", index=False)
+    orders = OrderEngine(
+        cart_events,
+        sessions,
+        customers,
+        products
+    ).generate()
 
-    print(f"Sessions generated: {len(sessions)}")
-    print("Simulation complete.")
+    print("Orders generated")
 
-    # -----------------------------------
-    # Cart Events
-    # -----------------------------------
-    cart_engine = CartEngine(sessions, customers, latent_traits, products)
-    cart_events = cart_engine.generate_cart_events()
+    print("Running ETL pipeline")
 
-    cart_events.to_csv(DATA_RAW / "cart_events.csv", index=False)
+    etl = ETLPipeline()
+    etl.run()
 
-    print(f"Cart events generated: {len(cart_events)}")
+    print("ETL completed")
+
+    build_star_schema()
+
+    print("Pipeline finished successfully")
 
 
 if __name__ == "__main__":

@@ -1,14 +1,16 @@
 import pandas as pd
 import numpy as np
+from src.customer_engine import CustomerEngine
 
-from .config import (
+from src.config import (
     SIMULATION_START,
     SIMULATION_END,
     WEEKEND_BOOST,
     FESTIVE_MONTH,
     SLOW_MONTH,
     FESTIVE_BOOST,
-    SLOW_MONTH_DROP
+    SLOW_MONTH_DROP,
+    DEVICES
 )
 
 
@@ -20,16 +22,19 @@ class SessionEngine:
     Avoids nested day × customer loops for performance efficiency.
     """
 
-    def __init__(self, customers_df, latent_traits_df):
+    def __init__(self, customers_df):
+
+        self.latent = CustomerEngine().generate_latent_traits()
+
         # Merge latent traits once (critical optimization)
         self.customers = customers_df.merge(
-            latent_traits_df,
+            self.latent,
             on="customer_id",
             how="left"
         )
         self.sessions = None
 
-    def generate_sessions(self):
+    def generate(self):
 
         date_range = pd.date_range(SIMULATION_START, SIMULATION_END)
 
@@ -105,7 +110,7 @@ class SessionEngine:
                     session_id,
                     customer_id,
                     date,
-                    row["device_type"],
+                    np.random.choice(DEVICES),
                     channel,
                     pages_viewed,
                     session_duration,
@@ -127,5 +132,7 @@ class SessionEngine:
                 "bounced_flag"
             ]
         )
+
+        self.sessions.to_csv("data/raw/sessions.csv", index=False)
 
         return self.sessions

@@ -1,86 +1,40 @@
-# Product engine logic
 import pandas as pd
 import numpy as np
 
-from .config import (
-    NUM_PRODUCTS,
-    CATEGORY_MARGIN
-)
+from src.config import NUM_PRODUCTS, CATEGORY_MARGIN, CATEGORY_PRICE_RANGE
 
 
 class ProductEngine:
-    """
-    Responsible for generating product dimension table.
-    Includes pricing and margin structure.
-    """
 
-    def __init__(self):
-        self.products = None
-
-    def generate_products(self):
-        """
-        Generates product dimension table with
-        category-level economic realism.
-        """
-
-        product_ids = np.arange(1, NUM_PRODUCTS + 1)
+    def generate(self):
 
         categories = list(CATEGORY_MARGIN.keys())
 
-        # Distribute products across categories evenly
-        category_assignment = np.random.choice(
-            categories,
-            size=NUM_PRODUCTS
-        )
+        data = []
 
-        base_prices = []
-        margin_pct = []
-        cost = []
+        for i in range(NUM_PRODUCTS):
 
-        for cat in category_assignment:
+            category = np.random.choice(categories)
 
-            # -------------------------------
-            # Category-specific price bands
-            # -------------------------------
-            if cat == "Electronics":
-                price = np.random.uniform(15000, 80000)
+            margin = CATEGORY_MARGIN[category]
 
-            elif cat == "Fashion":
-                price = np.random.uniform(800, 6000)
+            min_price, max_price = CATEGORY_PRICE_RANGE[category]
 
-            elif cat == "Home":
-                price = np.random.uniform(2000, 25000)
+            price = np.random.uniform(min_price, max_price)
 
-            elif cat == "Beauty":
-                price = np.random.uniform(300, 5000)
+            cost = price * (1 - margin)
 
-            elif cat == "Grocery":
-                price = np.random.uniform(50, 1500)
+            data.append({
 
-            # -------------------------------
-            # Margin structure
-            # -------------------------------
-            base_margin = CATEGORY_MARGIN[cat]
+                "product_id": i + 1,
+                "category": category,
+                "base_price": round(price, 2),
+                "cost": round(cost, 2)
 
-            # Add slight noise to margin (realistic variation)
-            margin = np.clip(
-                np.random.normal(base_margin, 0.03),
-                0.02,
-                0.8
-            )
+            })
 
-            product_cost = price * (1 - margin)
+        products = pd.DataFrame(data)
 
-            base_prices.append(round(price, 2))
-            margin_pct.append(round(margin, 3))
-            cost.append(round(product_cost, 2))
+        products.to_csv("data/raw/products.csv", index=False)
 
-        self.products = pd.DataFrame({
-            "product_id": product_ids,
-            "category": category_assignment,
-            "base_price": base_prices,
-            "margin_pct": margin_pct,
-            "cost": cost
-        })
-
-        return self.products
+        return products
