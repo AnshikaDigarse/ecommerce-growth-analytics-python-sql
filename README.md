@@ -552,4 +552,4 @@ Possible extensions include:
 This project demonstrates how raw behavioral data can be transformed into actionable insights using a structured analytics pipeline.
 
 It combines **data engineering, product analytics, experimentation, and visualization** to replicate the workflows used in modern data-driven organizations.
->>>>>>> d272ad6 (Project restructure: ecommerce growth analytics platform with ETL pipeline, analytics SQL, notebooks, and documentation)
+
