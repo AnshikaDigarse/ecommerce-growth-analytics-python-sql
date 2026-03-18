@@ -44,7 +44,7 @@ def generate_all_data():
     cart_events = generate_cart_events(sessions, products)
     save_dataframe(cart_events, "data/raw/cart_events.csv")
 
-    orders = generate_orders(cart_events, products)
+    orders = generate_orders(cart_events, products, customers)
     save_dataframe(orders, "data/raw/orders.csv")
 
     print("✅ Data Generation Completed\n")

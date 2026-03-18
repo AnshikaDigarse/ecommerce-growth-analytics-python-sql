@@ -6,7 +6,7 @@ import numpy as np
 
 def generate_cart_events(sessions_df, products_df):
     """
-    Simulates add-to-cart events
+    Simulate add-to-cart events
     """
 
     cart_data = []
@@ -14,22 +14,30 @@ def generate_cart_events(sessions_df, products_df):
 
     for _, row in sessions_df.iterrows():
 
-        # simple probability
-        if np.random.rand() < 0.2:
+        # Higher engagement → higher chance
+        prob = 0.15 + (row["pages_viewed"] / 100)
 
-            product = products_df.sample(1).iloc[0]
+        if np.random.rand() < prob:
 
-            cart_data.append([
-                cart_id,
-                row["session_id"],
-                row["customer_id"],
-                product["product_id"],
-                np.random.randint(1, 3)
-            ])
+            num_items = np.random.randint(1, 4)
 
-            cart_id += 1
+            sampled_products = products_df.sample(num_items, replace=True)
+
+            for _, product in sampled_products.iterrows():
+
+                cart_data.append([
+                    cart_id,
+                    row["session_id"],
+                    row["customer_id"],
+                    product["product_id"],
+                    np.random.randint(1, 3),
+                    "add_to_cart",
+                    row["session_date"]
+                ])
+
+                cart_id += 1
 
     return pd.DataFrame(cart_data, columns=[
         "cart_id", "session_id", "customer_id",
-        "product_id", "quantity"
+        "product_id", "quantity", "event_type", "event_timestamp"
     ])

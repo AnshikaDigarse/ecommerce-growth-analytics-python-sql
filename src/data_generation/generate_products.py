@@ -7,25 +7,31 @@ from src.core.config import NUM_PRODUCTS, CATEGORY_MARGIN, CATEGORY_PRICE_RANGE
 
 def generate_products():
     """
-    Generates product catalog with pricing and margins
+    Generate realistic product catalog with pricing and cost structure
     """
 
+    products = []
+
     categories = list(CATEGORY_MARGIN.keys())
-    data = []
 
     for i in range(NUM_PRODUCTS):
+
         category = np.random.choice(categories)
-        margin = CATEGORY_MARGIN[category]
+
         min_price, max_price = CATEGORY_PRICE_RANGE[category]
+        base_price = np.random.uniform(min_price, max_price)
 
-        price = np.random.uniform(min_price, max_price)
-        cost = price * (1 - margin)
+        margin_pct = CATEGORY_MARGIN[category]
+        cost = base_price * (1 - margin_pct)
 
-        data.append({
-            "product_id": i + 1,
-            "category": category,
-            "base_price": round(price, 2),
-            "cost": round(cost, 2)
-        })
+        products.append([
+            i + 1,
+            category,
+            round(base_price, 2),
+            round(cost, 2),
+            margin_pct
+        ])
 
-    return pd.DataFrame(data)
+    return pd.DataFrame(products, columns=[
+        "product_id", "category", "base_price", "cost", "margin_pct"
+    ])
