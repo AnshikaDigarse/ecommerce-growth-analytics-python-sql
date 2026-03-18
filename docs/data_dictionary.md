@@ -54,3 +54,23 @@
 - `fact_sessions`: Session-level metrics
 - `fact_orders`: Order-level transactions
 - `fact_cart_events`: Cart interaction events
+
+## Derived Analytics Tables
+
+### RFM Segmentation Table
+- `customer_id`: Unique customer identifier
+- `Recency`: Days since last purchase
+- `Frequency`: Total number of orders
+- `Monetary`: Total revenue spent
+- `R_score`: Recency score (1-5, 5=most recent)
+- `F_score`: Frequency score (1-5, 5=most frequent)
+- `M_score`: Monetary score (1-5, 5=highest spending)
+- `RFM_Score`: Combined RFM score string (e.g., "555")
+- `Segment`: Customer segment (Champions, Loyal, Potential Loyalist, At Risk, Lost)
+
+### Customer Lifetime Value Table
+- `customer_id`: Unique customer identifier
+- `total_orders`: Total number of orders placed
+- `total_revenue`: Total revenue generated
+- `AOV`: Average Order Value (total_revenue / total_orders)
+- `CLV`: Customer Lifetime Value (AOV * total_orders)

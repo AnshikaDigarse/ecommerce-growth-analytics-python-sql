@@ -93,17 +93,43 @@ ecommerce-growth-analytics-platform
 │   └── processed
 │
 ├── notebooks
+│   ├── 01_eda_customer_behavior.ipynb
+│   ├── 02_conversion_funnel_analysis.ipynb
+│   ├── 03_ab_experimentation.ipynb
+│   ├── 04_customer_retention_cohort.ipynb
+│   ├── 05_pricing_margin_analysis.ipynb
+│   ├── 06_customer_segmentation_rfm.ipynb
+│   ├── 07_customer_lifetime_value.ipynb
+│   └── 08_feature_adoption_analysis.ipynb
 │
 ├── sql
+│   ├── analytics_queries.sql
+│   ├── schema.sql
+│   └── star_schema.sql
 │
 ├── src
+│   ├── cart_engine.py
+│   ├── config.py
+│   ├── customer_engine.py
+│   ├── etl_pipeline.py
+│   ├── metrics_engine.py
+│   ├── order_engine.py
+│   ├── product_engine.py
+│   ├── session_engine.py
+│   ├── utils.py
+│   ├── validation_engine.py
+│   └── __pycache__/
 │
 ├── dashboard
+│   ├── app.py
+│   └── RetailFlow.json
 │
 ├── docs
+│   └── data_dictionary.md
 │
 ├── main.py
 ├── requirements.txt
+├── test_schema.py
 └── README.md
 ```
 
@@ -195,6 +221,21 @@ Examples:
 * logging utilities
 
 This prevents duplication of code across multiple modules.
+
+---
+
+## validation_engine.py
+
+Provides data validation utilities for dataframes.
+
+Functions include:
+
+* checking row counts
+* identifying missing values
+* detecting duplicate rows
+* calculating null percentages
+
+Used across all notebooks to ensure data quality before analysis.
 
 ---
 
@@ -426,6 +467,46 @@ Helps identify pricing strategies that balance growth and profitability.
 
 ---
 
+## 06_customer_segmentation_rfm.ipynb
+
+Performs RFM (Recency, Frequency, Monetary) customer segmentation.
+
+Calculates RFM scores and segments customers into:
+
+* Champions
+* Loyal
+* Potential Loyalist
+* At Risk
+* Lost
+
+Provides foundation for targeted marketing strategies.
+
+---
+
+## 07_customer_lifetime_value.ipynb
+
+Calculates Customer Lifetime Value (CLV) using the formula:
+
+CLV = Average Order Value × Purchase Frequency
+
+Analyzes CLV distribution and compares CLV across RFM segments to identify high-value customer groups.
+
+---
+
+## 08_feature_adoption_analysis.ipynb
+
+Analyzes user behavior and feature adoption metrics including:
+
+* Purchase conversion rate
+* Repeat purchase rate
+* Product category preferences
+* High-value user behavior
+* Order distribution patterns
+
+Answers questions about user engagement and feature effectiveness.
+
+---
+
 # Dashboard Directory
 
 ```
@@ -518,6 +599,9 @@ Open notebooks in the following order:
 03_ab_experimentation
 04_customer_retention_cohort
 05_pricing_margin_analysis
+06_customer_segmentation_rfm
+07_customer_lifetime_value
+08_feature_adoption_analysis
 ```
 
 ---
@@ -532,6 +616,9 @@ The project enables analysis of several important business metrics:
 * experiment performance
 * customer retention patterns
 * pricing and profitability trade-offs
+* customer segmentation (RFM)
+* customer lifetime value
+* feature adoption and user behavior patterns
 
 ---
 
