@@ -1,26 +1,24 @@
 
-# 📊 Ecommerce Growth Analytics Platform
+# 📊 E-commerce Growth Analytics Platform
 
-A production-style ecommerce analytics system built using **Python, SQL, and Power BI** to simulate, analyze, and optimize user behavior, conversion funnels, and business growth.
-
----
-
-## 🚀 Key Features
-
-- 📦 Synthetic data generation (customers, sessions, cart, orders)
-- 📊 Funnel & conversion analysis
-- 🧪 A/B experimentation framework
-- 🔁 Retention & cohort analysis
-- 💰 Pricing and margin optimization
-- 📈 Customer segmentation (RFM, CLV)
-- 📉 Feature adoption tracking
-- 📊 Interactive Power BI dashboard
+A full-stack data analytics project that simulates an e-commerce environment to analyze customer behavior, improve conversion, and drive business growth using **Python, SQL, and Power BI**.
 
 ---
 
-## 🏗️ Architecture
+# 🎯 Business Objective
 
+This project is designed to answer key business questions:
 
+* Where are users dropping in the purchase funnel?
+* Are customers returning after their first purchase?
+* Which customers drive the most revenue?
+* How do product features impact user behavior?
+
+---
+
+# 🏗️ End-to-End Architecture
+
+```text
 Data Generation (Python)
 ↓
 Raw Data (CSV)
@@ -32,50 +30,101 @@ Data Warehouse (SQL Star Schema)
 Analytics Layer (Notebooks)
 ↓
 Dashboard (Power BI)
-
-
----
-
-## 🗂️ Project Structure
-
-
-src/ → Data generation + ETL engines
-sql/ → Schema + analytical queries
-notebooks/ → EDA, experimentation, retention, CLV
-dashboard/ → Power BI dashboard
-data/ → Raw & processed data (ignored in git)
-
+```
 
 ---
 
-## 🛠️ Tech Stack
+# 🧱 Project Structure
 
-- Python (Pandas, NumPy)
-- SQL (MySQL/PostgreSQL)
-- Power BI
-- Git & GitHub
-
----
-
-## 📊 Key Business Metrics
-
-- Conversion Rate
-- Cart Abandonment Rate
-- Customer Retention
-- Average Order Value (AOV)
-- Customer Lifetime Value (CLV)
+```text
+src/        → Data generation + ETL pipeline  
+sql/        → Schema design + analytical queries  
+notebooks/  → Business analysis (funnel, cohort, RFM, CLV)  
+dashboard/  → Power BI dashboard  
+data/       → Raw & processed data (ignored in Git)  
+main.py     → Pipeline execution script  
+```
 
 ---
 
-## 🎯 Objective
+# 📊 Key Analyses
 
-To simulate a real-world ecommerce environment and demonstrate end-to-end analytics capabilities — from data generation to business insights.
+### 🔹 Funnel Analysis
+
+* Identifies drop-offs across user journey
+* Helps improve conversion rate
+
+### 🔹 Cohort & Retention Analysis
+
+* Tracks user retention over time
+* Measures repeat customer behavior
+
+### 🔹 A/B Testing
+
+* Evaluates impact of product changes
+* Measures conversion uplift
+
+### 🔹 Customer Segmentation (RFM)
+
+* Identifies high-value customers
+* Segments users into Champions, Loyal, At Risk
+
+### 🔹 Customer Lifetime Value (CLV)
+
+* Measures long-term customer value
+* Helps prioritize high-value segments
+
+### 🔹 Feature Adoption Analysis
+
+* Tracks user engagement
+* Identifies behavior driving revenue
 
 ---
 
-## 📌 Future Improvements
+# 📊 Key Business Metrics
 
-- Real-time streaming pipeline
-- ML-based recommendation system
-- Advanced experimentation (multi-variate testing)
+* Conversion Rate
+* Cart Abandonment Rate
+* Retention Rate
+* Average Order Value (AOV)
+* Customer Lifetime Value (CLV)
+
+---
+
+# 📈 Dashboard
+
+Interactive Power BI dashboard showcasing:
+
+* Funnel drop-offs
+* Retention trends
+* Customer segments
+* Revenue insights
+
+![Dashboard](dashboard/screenshot.png)
+
+---
+
+# 🛠️ Tech Stack
+
+* Python (Pandas, NumPy)
+* SQL (MySQL / PostgreSQL)
+* Power BI
+* Git & GitHub
+
+---
+
+# 🚀 Key Highlights
+
+* Built an end-to-end analytics pipeline from data generation to dashboarding
+* Implemented real-world product analytics techniques
+* Designed a scalable and modular data system
+* Focused on business-driven insights, not just data processing
+
+---
+
+# 🔮 Future Improvements
+
+* Real-time data pipeline
+* Recommendation system
+* Advanced experimentation framework
 
