@@ -61,3 +61,6 @@ SLOW_MONTH = 8
 WEEKEND_BOOST = 1.10
 FESTIVE_BOOST = 1.25
 SLOW_MONTH_DROP = 0.85
+
+# Database Configuration
+DATABASE_URL = "mysql+pymysql://root:Anshika%401@localhost:3306/ecommerce_analytics"
