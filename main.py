@@ -11,12 +11,13 @@ Pipeline steps
 
 import os
 
-from src.customer_engine import CustomerEngine
-from src.product_engine import ProductEngine
-from src.session_engine import SessionEngine
-from src.cart_engine import CartEngine
-from src.order_engine import OrderEngine
-from src.etl_pipeline import ETLPipeline
+from src.data_generation.generate_customers import generate_customers
+from src.data_generation.generate_products import generate_products
+from src.data_generation.generate_sessions import generate_sessions
+from src.data_generation.generate_cart_events import generate_cart_events
+from src.data_generation.generate_orders import generate_orders
+from src.pipeline.etl_pipeline import run_etl
+from src.core.utils import save_dataframe
 
 from sqlalchemy import create_engine, text
 
@@ -51,36 +52,29 @@ def main():
 
     print("Starting E-commerce Growth Platform Simulation")
 
-    customers = CustomerEngine().generate()
+    customers = generate_customers()
+    save_dataframe(customers, "data/raw/customers.csv")
     print("Customers generated")
 
-    # Generate and save latent traits
-    latent_traits = CustomerEngine().generate_latent_traits()
-    latent_traits.to_csv("data/processed/customer_latent_traits.csv", index=False)
-    print("Latent traits generated")
-
-    products = ProductEngine().generate()
+    products = generate_products()
+    save_dataframe(products, "data/raw/products.csv")
     print("Products generated")
 
-    sessions = SessionEngine(customers).generate()
+    sessions = generate_sessions(customers)
+    save_dataframe(sessions, "data/raw/sessions.csv")
     print("Sessions generated")
 
-    cart_events = CartEngine(sessions, products).generate()
+    cart_events = generate_cart_events(sessions, products)
+    save_dataframe(cart_events, "data/raw/cart_events.csv")
     print("Cart events generated")
 
-    orders = OrderEngine(
-        cart_events,
-        sessions,
-        customers,
-        products
-    ).generate()
-
+    orders = generate_orders(cart_events, products)
+    save_dataframe(orders, "data/raw/orders.csv")
     print("Orders generated")
 
     print("Running ETL pipeline")
 
-    etl = ETLPipeline()
-    etl.run()
+    run_etl()
 
     print("ETL completed")
 
