@@ -8,8 +8,10 @@ Flow:
 4. Build data warehouse (star schema)
 """
 
+
 import os
 from sqlalchemy import create_engine, text
+import pandas as pd
 
 # Data generation
 from src.data_generation.generate_customers import generate_customers
@@ -20,6 +22,7 @@ from src.data_generation.generate_orders import generate_orders
 
 # Pipeline
 from src.pipeline.etl_pipeline import run_etl
+from src.pipeline.data_validation import validate_dataframe
 
 # Utilities
 from src.core.utils import save_dataframe
@@ -51,7 +54,31 @@ def generate_all_data():
 
 
 # -----------------------------
-# STEP 2: BUILD STAR SCHEMA
+# STEP 2: VALIDATE DATA
+# -----------------------------
+
+def run_validation_stage(stage="raw"):
+    print(f"\n🔍 Running {stage.upper()} Data Validation...")
+
+    base_path = f"data/{stage}"
+
+    try:
+        customers = pd.read_csv(f"{base_path}/customers.csv")
+        sessions = pd.read_csv(f"{base_path}/sessions.csv")
+        orders = pd.read_csv(f"{base_path}/orders.csv")
+
+        validate_dataframe(customers, "Customers")
+        validate_dataframe(sessions, "Sessions")
+        validate_dataframe(orders, "Orders")
+
+        print("✅ Validation Passed\n")
+
+    except Exception as e:
+        print("❌ Validation Failed:", e)
+
+
+# -----------------------------
+# STEP 3: BUILD STAR SCHEMA
 # -----------------------------
 def build_star_schema():
     print("🏗️ Building Star Schema...")
@@ -77,24 +104,22 @@ def build_star_schema():
 # MAIN FUNCTION
 # -----------------------------
 def main():
-    print("🚀 Starting E-commerce Analytics Pipeline\n")
+    print("🚀 Starting Pipeline")
 
-    # Ensure correct working directory
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-    # 1. Generate Data
     generate_all_data()
 
-    # 2. Run ETL
-    print("🔄 Running ETL Pipeline...")
-    run_etl()
-    print("✅ ETL Completed\n")
+    # 🔍 VALIDATE RAW DATA
+    run_validation_stage("raw")
 
-    # 3. Build Warehouse
+    print("🔄 Running ETL...")
+    run_etl()
+
+    # 🔍 VALIDATE PROCESSED DATA
+    run_validation_stage("processed")
+
     build_star_schema()
 
-    print("🎉 Pipeline Completed Successfully")
-
+    print("🎉 Pipeline Completed")
 
 # -----------------------------
 # ENTRY POINT
