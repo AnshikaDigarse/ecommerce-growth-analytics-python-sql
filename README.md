@@ -36,14 +36,120 @@ Dashboard (Power BI)
 
 # 🧱 Project Structure
 
-```text
-src/        → Data generation + ETL pipeline  
-sql/        → Schema design + analytical queries  
-notebooks/  → Business analysis (funnel, cohort, RFM, CLV)  
-dashboard/  → Power BI dashboard  
-data/       → Raw & processed data (ignored in Git)  
-main.py     → Pipeline execution script  
-```
+This project follows a modular and scalable architecture separating data generation, processing, analytics, and visualization layers.
+
+---
+
+## 📁 Root Directory
+
+ecommerce_growth_platform/
+│
+├── src/                     # Core source code  
+├── sql/                     # Database schema & queries  
+├── notebooks/              # Analysis notebooks  
+├── dashboard/              # Power BI dashboard  
+├── data/                   # Raw & processed data (ignored in Git)  
+├── docs/                   # Documentation  
+│
+├── main.py                 # Pipeline entry point  
+├── README.md               # Project overview  
+├── requirements.txt        # Dependencies  
+├── .env.example            # Environment template  
+├── .gitignore              # Ignore rules  
+
+---
+
+## 🔹 src/ (Core Logic)
+
+src/
+│
+├── core/
+│   ├── config.py           # Config & DB connection  
+│   ├── utils.py            # Helper functions  
+│
+├── data_generation/
+│   ├── generate_customers.py  
+│   ├── generate_products.py  
+│   ├── generate_sessions.py  
+│   ├── generate_cart_events.py  
+│   ├── generate_orders.py  
+│
+├── pipeline/
+│   ├── etl_pipeline.py     # ETL logic  
+│   ├── data_validation.py  # Data quality checks  
+│
+├── metrics/
+│   ├── business_metrics.py # KPI calculations  
+
+---
+
+## 🔹 sql/ (Database Layer)
+
+sql/
+│
+├── schema.sql              # Base tables  
+├── star_schema.sql         # Fact & dimension tables  
+├── analytics_queries.sql   # Business queries  
+
+---
+
+## 🔹 notebooks/ (Analysis)
+
+notebooks/
+│
+├── 01_eda_customer_behavior.ipynb  
+├── 02_conversion_funnel_analysis.ipynb  
+├── 03_ab_experimentation.ipynb  
+├── 04_customer_retention_cohort.ipynb  
+├── 05_pricing_margin_analysis.ipynb  
+├── 06_customer_segmentation_rfm.ipynb  
+
+---
+
+## 🔹 dashboard/ (Visualization)
+
+dashboard/
+│
+├── ecommerce_dashboard.pbix  
+├── RetailFlow.json  
+
+---
+
+## 🔹 data/ (Storage)
+
+data/
+│
+├── raw/        # Generated data  
+├── processed/  # Cleaned data  
+
+(Note: This folder is ignored in Git)
+
+---
+
+## 🔹 docs/ (Documentation)
+
+docs/
+│
+├── architecture.md  
+├── data_dictionary.md  
+
+---
+
+## 🔁 Pipeline Flow
+
+Data Generation → Raw Data → Validation → ETL → Processed Data → MySQL → Star Schema → Analytics → Dashboard
+
+---
+
+## 📌 Key Design Principles
+
+- Modular structure  
+- Separation of concerns  
+- Reusable components  
+- Business-focused analytics  
+- Clean and maintainable code  
+
+---
 
 ---
 
