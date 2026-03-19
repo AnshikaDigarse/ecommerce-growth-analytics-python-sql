@@ -62,5 +62,14 @@ WEEKEND_BOOST = 1.10
 FESTIVE_BOOST = 1.25
 SLOW_MONTH_DROP = 0.85
 
+
+
 # Database Configuration
-DATABASE_URL = "mysql+pymysql://root:Anshika%401@localhost:3306/ecommerce_analytics"
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Get DB connection from .env
+DATABASE_URL = os.getenv("DATABASE_URL")
