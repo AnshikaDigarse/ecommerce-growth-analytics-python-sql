@@ -33,25 +33,25 @@ DEVICES = ["Mobile", "Desktop", "Tablet"]
 
 
 CATEGORY_MARGIN = {
-    "Electronics": 0.10,
-    "Fashion": 0.30,
-    "Home": 0.40,
-    "Beauty": 0.45,
-    "Grocery": 0.08
+    "Electronics": 0.15,
+    "Fashion": 0.50,
+    "Home": 0.35,
+    "Beauty": 0.60,
+    "Grocery": 0.15
 }
 
 
 CATEGORY_PRICE_RANGE = {
 
-    "Electronics": (1000, 200000),
+    "Electronics": (1000, 50000),
 
-    "Fashion": (500, 20000),
+    "Fashion": (500, 10000),
 
-    "Home": (800, 25000),
+    "Home": (800, 50000),
 
-    "Beauty": (200, 30000),
+    "Beauty": (200, 25000),
 
-    "Grocery": (50, 2500)
+    "Grocery": (50, 5000)
 }
 
 # Seasonality Parameters
@@ -59,10 +59,8 @@ FESTIVE_MONTH = 11
 SLOW_MONTH = 8
 
 WEEKEND_BOOST = 1.10
-FESTIVE_BOOST = 1.25
-SLOW_MONTH_DROP = 0.85
-
-
+FESTIVE_BOOST = 1.45
+SLOW_MONTH_DROP = 0.80
 
 # Database Configuration
 import os

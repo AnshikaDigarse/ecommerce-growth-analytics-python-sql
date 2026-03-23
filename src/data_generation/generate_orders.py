@@ -23,7 +23,7 @@ def generate_orders(cart_df, products_df, customers_df):
     for _, row in df.iterrows():
 
         # Base conversion probability
-        purchase_prob = 0.6
+        purchase_prob = 0.15
 
         # Higher quantity → higher intent
         purchase_prob += row["quantity"] * 0.05
